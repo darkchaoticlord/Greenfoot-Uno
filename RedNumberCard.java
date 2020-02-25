@@ -1,0 +1,35 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+/**
+ * Write a description of class RedNumberCard here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class RedNumberCard extends RedCard implements NumberCard
+{
+    private int value;
+    
+    public RedNumberCard(int index, int value) {
+        super(index, "Red_" + String.valueOf(value) + ".png");
+        this.value = value;
+    }
+    
+    /**
+     * Act - do whatever the RedNumberCard wants to do. This method is called whenever
+     * the 'Act' or 'Run' button gets pressed in the environment.
+     */
+    public void act() 
+    {
+        // Add your action code here.
+    } 
+    
+    public int getValue() {
+        return this.value;
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + " - Card: Red " + String.valueOf(this.value);
+    }
+}
