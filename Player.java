@@ -27,6 +27,7 @@ public class Player extends Actor
     {
         GameScreen game = (GameScreen) getWorld();
         Deck deck = game.getDeck();
+        
         if (game.isPlayerTurn() && game.canPlay()) {
             // Clicked own cards
             if (Greenfoot.mouseClicked(this)) {
@@ -41,6 +42,7 @@ public class Player extends Actor
                         game.replaceTopCard(card);
                     }
                 }
+                
             } else if (Greenfoot.mouseClicked(deck)) {
                 Card card = deck.drawCard();
                 
@@ -50,13 +52,13 @@ public class Player extends Actor
                 } else {
                     cards.add(card);
                 }
+                
                 repaintCards();
+                
+                game.toggleTurn();
             } else {
                 return;
             }
-            
-            GameScreen.wait(2000);
-            game.toggleTurn();
         }
         
         if (cards.size() == 0) {
@@ -100,25 +102,28 @@ public class Player extends Actor
     }
     
     private int cardSelected() {
-        int mouseX = Greenfoot.getMouseInfo().getX();
+        MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         
-        int topLeftX = getX() - getImage().getWidth() / 2;
-        int bottomRightX = getX() + getImage().getWidth() / 2;
-        
-        int index = 0;
-        for (int i = topLeftX; i < bottomRightX; i += CARDGAP) {
-            if (mouseX >= i && mouseX <= i + CARDGAP - 10) {
-                return index;
+        if (mouseInfo != null) {
+            int mouseX = mouseInfo.getX();
+            int topLeftX = getX() - getImage().getWidth() / 2;
+            int bottomRightX = getX() + getImage().getWidth() / 2;
+            
+            int index = 0;
+            for (int i = topLeftX; i < bottomRightX; i += CARDGAP) {
+                if (mouseX >= i && mouseX <= i + CARDGAP - 10) {
+                    return index;
+                }
+                index++;
             }
-            index++;
         }
         
         return -1;
     }
     
     private void repaintCards() {
-        GreenfootImage image = new GreenfootImage(CARDGAP * this.cards.size(), 72);
-        int x = 0;
+        GreenfootImage image = new GreenfootImage(CARDGAP * this.cards.size() + 10, 72);
+        int x = 10;
         for (Card card: this.cards) {
             image.drawImage(card.getImage(), x, 0);
             x += CARDGAP;

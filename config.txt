@@ -1,0 +1,2 @@
+ShowEnemyCard: true
+Play2v2: false

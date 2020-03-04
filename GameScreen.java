@@ -1,4 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 /**
  * Write a description of class GameScreen here.
@@ -10,6 +13,8 @@ public class GameScreen extends World
 {
     private static final int WIDTH = 850;
     private static final int HEIGHT = 480;
+    public static boolean showEnemyCards;
+    public static boolean play2v2;
     private boolean playerTurn;
     private boolean canPlay;
     private Button backButton;
@@ -27,7 +32,18 @@ public class GameScreen extends World
     public GameScreen()
     {
         super(WIDTH, HEIGHT, 1); 
+        readConfig();
         prepare();
+    }
+    
+    private void readConfig() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(Settings.CONFIG_FILE));
+            showEnemyCards = Boolean.parseBoolean(reader.readLine().split(" ")[1]);
+            play2v2 = Boolean.parseBoolean(reader.readLine().split(" ")[1]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -99,24 +115,45 @@ public class GameScreen extends World
         
         if (card instanceof PowerCard) {
             // Playing Power cards (Wild or Wild Draw)
-            toggleCanPlay(); 
-            ColorSelect selection = new ColorSelect();
-            addObject(selection, topCard.getX(), topCard.getY());
+            
+            if (this.playerTurn) {
+                toggleCanPlay();
+            
+                ColorSelect selection = new ColorSelect();
+                addObject(selection, topCard.getX(), topCard.getY());
+                
+                if (topCard instanceof WildDrawCard) {
+                    computer.drawCard(deck, 4);
+                }
+            } else {
+                String[] colors = {"Blue", "Green", "Red", "Yellow"};
+                ((PowerCard) topCard).changeColor(colors[Greenfoot.getRandomNumber(colors.length)]);
+            
+                if (topCard instanceof WildDrawCard) {
+                    player.drawCard(deck, 4);
+                }
+                
+                toggleTurn();
+            }
         } else if (card instanceof SpecialCard) {
             // Player Special Colored Cards
             SpecialCard specialCard = (SpecialCard) card;
             
-            if (specialCard.getPower().equals("Reverse")) {
-                toggleTurn();
-            } else if (specialCard.getPower().equals("Skip")) {
-                toggleTurn();
-            } else {
+            if (specialCard.getPower().equals("Draw")) {
                 if (this.playerTurn) {
                     computer.drawCard(deck, 2);
                 } else {
                     player.drawCard(deck, 2);
                 }
             }
+            
+            toggleTurn();
+            
+            GameScreen.wait(500);
+            
+            toggleTurn();
+        } else {
+            toggleTurn();
         }
     }
     

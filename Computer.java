@@ -23,8 +23,12 @@ public class Computer extends Actor
         GreenfootImage image = new GreenfootImage(CARDGAP * this.cards.size() + CARDGAP, 72);
         int x = 0;
         for (Card card: this.cards) {
-            // image.drawImage(new GreenfootImage("Deck.png"), x, 0);
-            image.drawImage(card.getImage(), x, 0);
+            if (GameScreen.showEnemyCards) {
+                image.drawImage(card.getImage(), x, 0);
+            } else {
+                image.drawImage(new GreenfootImage("Deck.png"), x, 0);
+            }
+            
             x += CARDGAP;
         }
         setImage(image);
@@ -37,6 +41,8 @@ public class Computer extends Actor
     public void act() {
         GameScreen game = (GameScreen) getWorld();
         
+        GameScreen.wait(2000);
+        
         if (!game.isPlayerTurn() && game.canPlay()) {
             List<Card> playableCards = new ArrayList<>();
             for (Card card : this.cards) {
@@ -46,17 +52,23 @@ public class Computer extends Actor
             }
             
             if (playableCards.size() == 0) {
-                drawCard(game.getDeck(), 1);
+                Card card  = game.getDeck().drawCard();
+                cards.add(card);
                 repaintCards();
+                
+                GameScreen.wait(1000);
+                
+                if (game.canPlayCard(card)) {
+                    cards.remove(card);
+                    repaintCards();
+                    game.replaceTopCard(card);
+                }
             } else {
                 Card playing = playableCards.get(Greenfoot.getRandomNumber(playableCards.size()));
                 cards.remove(playing);
                 repaintCards();
                 game.replaceTopCard(playing);
             }
-            
-            GameScreen.wait(2000);
-            game.toggleTurn();
         }
         
         if (cards.size() == 0) {

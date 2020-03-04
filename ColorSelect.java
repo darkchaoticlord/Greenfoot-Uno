@@ -16,48 +16,33 @@ public class ColorSelect extends Actor
     {
         GameScreen game = (GameScreen) getWorld();
         PowerCard topCard = (PowerCard) game.getTopCard();
+        MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         
-        if (game.isPlayerTurn()) {
-            if (Greenfoot.mouseClicked(this)) {
-                int mouseX = Greenfoot.getMouseInfo().getX();
-                int mouseY = Greenfoot.getMouseInfo().getY();
-                
-                int topLeftX = getX() - getImage().getWidth() / 2;
-                int topLeftY = getY() - getImage().getHeight() / 2;
-                int bottomRightX = getX() + getImage().getWidth() / 2;
-                int bottomRightY = getY() + getImage().getHeight() / 2;
-                
-                if (mouseX >= topLeftX && mouseX <= getX() && mouseY >= topLeftY && mouseY <= getY()) {
-                    // Blue
-                    topCard.changeColor("Blue");
-                } else if (mouseX >= getX() && mouseX <= bottomRightX && mouseY >= topLeftY && mouseY <= getY()) {
-                    // Red
-                    topCard.changeColor("Red");
-                } else if (mouseX >= topLeftX && mouseX <= getX() && mouseY >= getY() && mouseY <= bottomRightY) {
-                    // Yellow
-                    topCard.changeColor("Yellow");
-                } else {
-                    // Green
-                    topCard.changeColor("Green");
-                }
-                
-                game.toggleCanPlay();
+        if (game.isPlayerTurn() && Greenfoot.mouseClicked(this) && mouseInfo != null) {
+            int mouseX = mouseInfo.getX();
+            int mouseY = mouseInfo.getY();
+            
+            int topLeftX = getX() - getImage().getWidth() / 2;
+            int topLeftY = getY() - getImage().getHeight() / 2;
+            int bottomRightX = getX() + getImage().getWidth() / 2;
+            int bottomRightY = getY() + getImage().getHeight() / 2;
+            
+            if (mouseX >= topLeftX && mouseX <= getX() && mouseY >= topLeftY && mouseY <= getY()) {
+                // Blue
+                topCard.changeColor("Blue");
+            } else if (mouseX >= getX() && mouseX <= bottomRightX && mouseY >= topLeftY && mouseY <= getY()) {
+                // Red
+                topCard.changeColor("Red");
+            } else if (mouseX >= topLeftX && mouseX <= getX() && mouseY >= getY() && mouseY <= bottomRightY) {
+                // Yellow
+                topCard.changeColor("Yellow");
             } else {
-                return;
+                // Green
+                topCard.changeColor("Green");
             }
-        } else {
-            String[] colors = {"Blue", "Green", "Red", "Yellow"};
-            topCard.changeColor(colors[Greenfoot.getRandomNumber(colors.length)]);
+            game.toggleCanPlay();
+            game.removeObject(this);
+            game.toggleTurn();
         }
-        
-        if (topCard instanceof WildDrawCard) {
-            if (game.isPlayerTurn()) {
-                game.getComputer().drawCard(game.getDeck(), 4);
-            } else {
-                game.getPlayer().drawCard(game.getDeck(), 4);
-            }
-        }
-        
-        game.removeObject(this);
     }    
 }
