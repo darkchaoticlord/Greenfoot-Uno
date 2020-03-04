@@ -1,12 +1,11 @@
-------------------------------------------------------------------------
-This is the project README file. Here, you should describe your project.
-Tell the reader (someone who does not know anything about this project)
-all he/she needs to know. The comments should usually include at least:
-------------------------------------------------------------------------
+PROJECT TITLE: UNO (Greenfoot Java)
+PURPOSE OF PROJECT: Tutoring Sessions
+VERSION & DATE: v1.0 (2020/2/25)
+HOW TO START THIS PROJECT: Make sure Greenfoot is installed from https://www.greenfoot.org/
+AUTHORS: Jawad Adnan & Peter Speirs
 
-PROJECT TITLE:
-PURPOSE OF PROJECT:
-VERSION or DATE:
-HOW TO START THIS PROJECT:
-AUTHORS:
-USER INSTRUCTIONS:
+NOTE:
+    - UNO Card Colors: 	Blue: 	#0098DC (0, 152, 220)
+			Green: 	#33984C (51, 152, 76)
+			Yellow: #FFC825 (255, 200, 37)
+			Red: 	#EA323C (234, 50, 60)
