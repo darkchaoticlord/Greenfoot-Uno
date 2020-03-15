@@ -9,8 +9,7 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class User extends Player
-{
+public class User extends Player {
     public User(String name, Deck deck) {
         super(name, deck);
     }
@@ -19,13 +18,9 @@ public class User extends Player
         super(name, deck, cardGap);
     }
     
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    
     @Override
-    public void act() 
-    {
+    public void act() {
         GameScreen game = (GameScreen) getWorld();
         Deck deck = game.getDeck();
         

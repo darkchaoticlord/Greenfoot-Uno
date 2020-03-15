@@ -6,20 +6,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class WildDrawCard extends PowerCard
-{
+public class WildDrawCard extends PowerCard {
     public WildDrawCard(int index) {
         super(index, "Wild_Draw.png");
     }
-    
-    /**
-     * Act - do whatever the WildDrawCard wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        // Add your action code here.
-    } 
     
     @Override
     public void changeColor(String color) {

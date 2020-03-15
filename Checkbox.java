@@ -6,8 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Checkbox extends Actor
-{
+public class Checkbox extends Actor {
     private static final int SQUARE_SIZE = 20;
     private boolean checked;
     
@@ -19,15 +18,6 @@ public class Checkbox extends Actor
             drawBox("red_cross.png");
         }
     }
-    
-    /**
-     * Act - do whatever the Checkbox wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        
-    } 
     
     public boolean isTick() {
         return this.checked;

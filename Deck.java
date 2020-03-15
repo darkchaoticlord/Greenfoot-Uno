@@ -8,8 +8,7 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Deck extends Actor
-{
+public class Deck extends Actor {
     private static final int TOTALCARDS = 108;
     public static final Class[] NUMBERCARDS = {BlueNumberCard.class, RedNumberCard.class, GreenNumberCard.class, YellowNumberCard.class};
     public static final Class[] SPECIALCARDS = {BlueSpecialCard.class, RedSpecialCard.class, GreenSpecialCard.class, YellowSpecialCard.class};
@@ -64,15 +63,6 @@ public class Deck extends Actor
             e.getStackTrace();
         }
     }
-    
-    /**
-     * Act - do whatever the Deck wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        // Add your action code here.
-    }  
     
     public Card drawCard() {
         while (true) {

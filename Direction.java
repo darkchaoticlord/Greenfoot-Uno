@@ -4,8 +4,7 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public enum Direction  
-{
+public enum Direction {
     CW(1), CCW(-1);
     
     private int amount;

@@ -9,8 +9,7 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Computer extends Player
-{
+public class Computer extends Player {
     private boolean isHorizontal;
     
     public Computer(String name, Deck deck, boolean isHorizontal, int cardGap) {

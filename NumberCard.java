@@ -6,7 +6,6 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public interface NumberCard
-{
+public interface NumberCard {
     int getValue();
 }

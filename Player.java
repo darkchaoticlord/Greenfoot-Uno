@@ -8,10 +8,12 @@ import java.util.List;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public abstract class Player extends Actor
-{
+public abstract class Player extends Actor {
     private static final int INITIAL = 7;
-    public static final int CARD_WIDTH = 50, CARD_HEIGHT = 72;
+    
+    public static final int CARD_WIDTH = 50;
+    public static final int CARD_HEIGHT = 72;
+    
     int cardGap;
     String name;
     boolean isHorizontal;
@@ -75,11 +77,11 @@ public abstract class Player extends Actor
         setImage(image);
     }
     
-    public abstract void act();
-    
-    public abstract boolean isUser();
-    
     public String getName() {
         return this.name;
     }
+    
+    public abstract void act();
+    
+    public abstract boolean isUser();
 }

@@ -6,8 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class NumberSelect extends Actor
-{
+public class NumberSelect extends Actor {
     private String number;
     private boolean selected;
     
@@ -23,15 +22,6 @@ public class NumberSelect extends Actor
         image.drawImage(new GreenfootImage(this.number, 30, Color.BLACK, new Color(255, 255, 255, 0)), 14, 5);
         setImage(image);
     }
-    
-    /**
-     * Act - do whatever the NumberSelect wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        
-    }   
     
     public void toggleSelected() {
         this.selected = !this.selected;

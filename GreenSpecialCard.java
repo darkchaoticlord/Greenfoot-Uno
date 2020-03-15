@@ -6,23 +6,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class GreenSpecialCard extends GreenCard implements SpecialCard
-{
+public class GreenSpecialCard extends GreenCard implements SpecialCard {
     private String power;
     
     public GreenSpecialCard(int index, String power) {
         super(index, power.equals("Draw") ? "Green_Draw.png" : (power.equals("Reverse") ? "Green_Reverse.png" : "Green_Skip.png"));
         this.power = power;
     }
-    
-    /**
-     * Act - do whatever the GreenSpecialCard wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        // Add your action code here.
-    } 
     
     public String getPower() {
         return this.power;
