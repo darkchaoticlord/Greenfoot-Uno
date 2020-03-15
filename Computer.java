@@ -9,41 +9,21 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Computer extends Actor
+public class Computer extends Player
 {
-    private List<Card> cards;
-    private static final int CARDGAP = 30;
+    private boolean isHorizontal;
     
-    public Computer(Card[] cards) {
-        this.cards = new ArrayList<>(Arrays.asList(cards));
-        repaintCards();
+    public Computer(String name, Deck deck, boolean isHorizontal, int cardGap) {
+        super(name, deck, isHorizontal, cardGap);
     }
     
-    private void repaintCards() {
-        GreenfootImage image = new GreenfootImage(CARDGAP * this.cards.size() + CARDGAP, 72);
-        int x = 0;
-        for (Card card: this.cards) {
-            if (GameScreen.showEnemyCards) {
-                image.drawImage(card.getImage(), x, 0);
-            } else {
-                image.drawImage(new GreenfootImage("Deck.png"), x, 0);
-            }
-            
-            x += CARDGAP;
-        }
-        setImage(image);
-    }
-    
-    /**
-     * Act - do whatever the Computer wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    @Override
     public void act() {
         GameScreen game = (GameScreen) getWorld();
         
         GameScreen.wait(2000);
         
-        if (!game.isPlayerTurn() && game.canPlay()) {
+        if (game.getCurrentPlayer().equals(this) && game.canPlay()) {
             List<Card> playableCards = new ArrayList<>();
             for (Card card : this.cards) {
                 if (game.canPlayCard(card)) {
@@ -78,15 +58,8 @@ public class Computer extends Actor
         }
     }  
     
-    public void drawCard(Deck deck, int amount) {
-        for (int i = 0; i < amount; i++) {
-            Card card = deck.drawCard();
-            cards.add(card);
-        }
-        repaintCards();
-    }
-    
-    public Card getCard() {
-        return this.cards.get(Greenfoot.getRandomNumber(this.cards.size()));
+    @Override
+    public boolean isUser() {
+        return false;
     }
 }

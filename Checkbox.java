@@ -26,16 +26,14 @@ public class Checkbox extends Actor
      */
     public void act() 
     {
-        if (Greenfoot.mouseClicked(this)) {
-            toggleCheckbox();
-        }
+        
     } 
     
     public boolean isTick() {
         return this.checked;
     }
     
-    private void toggleCheckbox() {
+    public void toggleCheckbox() {
         this.checked = !this.checked;
         
         if (this.checked) {

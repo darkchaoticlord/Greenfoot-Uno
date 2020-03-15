@@ -1,15 +1,10 @@
 #BlueJ class context
 comment0.target=Computer
 comment0.text=\r\n\ Write\ a\ description\ of\ class\ Computer\ here.\r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
-comment1.params=cards
-comment1.target=Computer(Card[])
+comment1.params=name\ deck\ isHorizontal\ cardGap
+comment1.target=Computer(java.lang.String,\ Deck,\ boolean,\ int)
 comment2.params=
-comment2.target=void\ repaintCards()
+comment2.target=void\ act()
 comment3.params=
-comment3.target=void\ act()
-comment3.text=\r\n\ Act\ -\ do\ whatever\ the\ Computer\ wants\ to\ do.\ This\ method\ is\ called\ whenever\r\n\ the\ 'Act'\ or\ 'Run'\ button\ gets\ pressed\ in\ the\ environment.\r\n
-comment4.params=deck\ amount
-comment4.target=void\ drawCard(Deck,\ int)
-comment5.params=
-comment5.target=Card\ getCard()
-numComments=6
+comment3.target=boolean\ isUser()
+numComments=4

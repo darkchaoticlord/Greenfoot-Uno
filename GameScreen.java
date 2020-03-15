@@ -13,18 +13,28 @@ public class GameScreen extends World
 {
     private static final int WIDTH = 850;
     private static final int HEIGHT = 480;
+    
+    // Game parameters
     public static boolean showEnemyCards;
     public static boolean play2v2;
-    private boolean playerTurn;
+    public static int numOfPlayers;
+    
+    // Players and its properties
+    private Player[] playerOrder;
+    private int currentPlayer;
+    private Direction direction;
+    
+    // User playable mode
     private boolean canPlay;
+    
+    // UI Element
     private Button backButton;
+    
+    // Extra Game Elements
     private Deck deck;
-    private Player player;
-    private Computer computer;
     private Card topCard;
-    private Class topCardClass;
-    private TurnArrow turnArrow;
     private Text turnLabel;
+    
     /**
      * Constructor for objects of class GameScreen.
      * 
@@ -39,8 +49,16 @@ public class GameScreen extends World
     private void readConfig() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(Settings.CONFIG_FILE));
+            
             showEnemyCards = Boolean.parseBoolean(reader.readLine().split(" ")[1]);
             play2v2 = Boolean.parseBoolean(reader.readLine().split(" ")[1]);
+            numOfPlayers = Integer.parseInt(reader.readLine().split(" ")[1]);
+            
+            // System.out.println("Show Enemy Cards: " + String.valueOf(showEnemyCards));
+            // System.out.println("Play 2 vs. 2: " + String.valueOf(play2v2));
+            // System.out.println("Number of Players: " + String.valueOf(numOfPlayers));
+            
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,34 +75,60 @@ public class GameScreen extends World
         deck = new Deck();
         addObject(deck,70,240);
         
-        Card[] playerCards = new Card[7];
-        for (int i = 0; i < playerCards.length; i++) {
-            playerCards[i] = deck.drawCard();
+        if (play2v2) {
+            User userOne = new User("User 1", deck);
+            addObject(userOne,475,430);
+            
+            User userTwo = new User("User 2", deck);
+            addObject(userTwo,475,50);
+            
+            Computer computerOne = new Computer("Computer 1", deck, false, 30);
+            addObject(computerOne,200,260);
+            
+            Computer computerTwo = new Computer("Computer 2", deck, false, 30);
+            addObject(computerTwo,750,260);
+            
+            this.playerOrder = new Player[] {userOne, computerOne, userTwo, computerTwo};
+        } else {
+            User userOne;
+            Computer computerOne, computerTwo, computerThree;
+            
+            userOne = new User("User", deck);
+            addObject(userOne,475,430);
+            
+            computerOne = new Computer("Computer 1", deck, true, 30);
+            addObject(computerOne,475,50);
+            
+            if (this.numOfPlayers == 2) {
+                this.playerOrder = new Player[] {userOne, computerOne};
+            }else if (this.numOfPlayers == 3) {
+                computerTwo = new Computer("Computer 2", deck, false, 30);
+                addObject(computerTwo,200,260);
+                
+                this.playerOrder = new Player[] {userOne, computerTwo, computerOne};
+            } else if (this.numOfPlayers == 4) {
+                computerTwo = new Computer("Computer 2", deck, false, 30);
+                addObject(computerTwo,200,260);
+                
+                computerThree = new Computer("Computer 3", deck, false, 30);
+                addObject(computerThree,750,260);
+                
+                this.playerOrder = new Player[] {userOne, computerTwo, computerOne, computerThree};
+            }
         }
-        
-        player = new Player(playerCards);
-        addObject(player,425,430);
-        
-        Card[] computerCards = new Card[7];
-        for (int i = 0; i < computerCards.length; i++) {
-            computerCards[i] = deck.drawCard();
-        }
-        
-        computer = new Computer(computerCards);
-        addObject(computer,425,50);
+        this.currentPlayer = 0;
         
         while (topCard == null || topCard.getIndex() < 8 || topCard.getIndex() > 84) {
             topCard = deck.drawCard();
         }
-        addObject(topCard, 425, 240);
+        addObject(topCard, 475, 240);
         
-        this.playerTurn = true;
         this.canPlay = true;
         
-        turnArrow = new TurnArrow();
-        turnLabel = new Text("Playing", 30, Color.WHITE);
-        addObject(turnArrow, 730, player.getY());
-        addObject(turnLabel, 800, player.getY());
+        this.direction = Direction.CW;
+        
+        this.turnLabel = new Text("Playing:\nUser 1", 30, Color.WHITE);
+        addObject(turnLabel, turnLabel.getImage().getWidth() / 2 + 10, HEIGHT - 30);
     }
     
     public void act() {
@@ -94,8 +138,7 @@ public class GameScreen extends World
     }
     
     private void showTurn() {
-        turnArrow.setLocation(turnArrow.getX(), this.playerTurn ? player.getY() : computer.getY());
-        turnLabel.setLocation(turnLabel.getX(), this.playerTurn ? player.getY() : computer.getY());
+        turnLabel.changeText("Playing:\n" + playerOrder[currentPlayer].getName());
         repaint();
     }
     
@@ -116,21 +159,21 @@ public class GameScreen extends World
         if (card instanceof PowerCard) {
             // Playing Power cards (Wild or Wild Draw)
             
-            if (this.playerTurn) {
+            if (getCurrentPlayer().isUser()) {
                 toggleCanPlay();
             
                 ColorSelect selection = new ColorSelect();
                 addObject(selection, topCard.getX(), topCard.getY());
                 
                 if (topCard instanceof WildDrawCard) {
-                    computer.drawCard(deck, 4);
+                    this.playerOrder[getNextPlayerIndex()].drawCard(deck, 4);
                 }
             } else {
                 String[] colors = {"Blue", "Green", "Red", "Yellow"};
                 ((PowerCard) topCard).changeColor(colors[Greenfoot.getRandomNumber(colors.length)]);
             
                 if (topCard instanceof WildDrawCard) {
-                    player.drawCard(deck, 4);
+                    this.playerOrder[getNextPlayerIndex()].drawCard(deck, 4);
                 }
                 
                 toggleTurn();
@@ -140,14 +183,13 @@ public class GameScreen extends World
             SpecialCard specialCard = (SpecialCard) card;
             
             if (specialCard.getPower().equals("Draw")) {
-                if (this.playerTurn) {
-                    computer.drawCard(deck, 2);
-                } else {
-                    player.drawCard(deck, 2);
-                }
+                this.playerOrder[getNextPlayerIndex()].drawCard(deck, 2);
+                toggleTurn();
+            } else if (specialCard.getPower().equals("Reverse")) {
+                this.direction = this.direction.toggleDirection();
+            } else if (specialCard.getPower().equals("Skip")) {
+                toggleTurn();
             }
-            
-            toggleTurn();
             
             GameScreen.wait(500);
             
@@ -169,24 +211,37 @@ public class GameScreen extends World
         return this.topCard;
     }
     
-    public Player getPlayer() {
-        return this.player;
+    public Player getPlayer(int index) {
+        return this.playerOrder[index];
     }
     
-    public Computer getComputer() {
-        return this.computer;
+    public Player getCurrentPlayer() {
+        return this.playerOrder[currentPlayer];
     }
     
     public Deck getDeck() {
         return this.deck;
     }
     
-    public boolean isPlayerTurn() {
-        return this.playerTurn;
+    public int getCurrentPlayerIndex() {
+        return this.currentPlayer;
+    }
+    
+    public int getNextPlayerIndex() {
+        return (this.currentPlayer + 1) % this.playerOrder.length;
     }
     
     public void toggleTurn() {
-        this.playerTurn = !this.playerTurn;
+        this.currentPlayer += direction.getAmount();
+        
+        if (this.currentPlayer == playerOrder.length) {
+            this.currentPlayer = 0;
+        }
+        
+        if (this.currentPlayer == -1) {
+            this.currentPlayer = playerOrder.length - 1;
+        }
+        
         showTurn();
     }
     

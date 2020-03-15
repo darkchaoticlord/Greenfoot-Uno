@@ -18,7 +18,7 @@ public class ColorSelect extends Actor
         PowerCard topCard = (PowerCard) game.getTopCard();
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         
-        if (game.isPlayerTurn() && Greenfoot.mouseClicked(this) && mouseInfo != null) {
+        if (game.getCurrentPlayer().isUser() && Greenfoot.mouseClicked(this) && mouseInfo != null) {
             int mouseX = mouseInfo.getX();
             int mouseY = mouseInfo.getY();
             

@@ -1,2 +1,3 @@
-ShowEnemyCard: true
+ShowEnemyCard: false
 Play2v2: false
+NumberOfPlayers: 4

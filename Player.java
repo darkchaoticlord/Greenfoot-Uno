@@ -1,7 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Write a description of class Player here.
@@ -9,63 +8,34 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Player extends Actor
+public abstract class Player extends Actor
 {
-    private List<Card> cards;
-    private static final int CARDGAP = 60;
+    private static final int INITIAL = 7;
+    public static final int CARD_WIDTH = 50, CARD_HEIGHT = 72;
+    int cardGap;
+    String name;
+    boolean isHorizontal;
+    List<Card> cards;
     
-    public Player(Card[] cards) {
-        this.cards = new ArrayList<>(Arrays.asList(cards));
+    public Player(String name, Deck deck, boolean isHorizontal, int cardGap) {
+        this.name = name;
+        this.cards = new ArrayList<>();
+        this.isHorizontal = isHorizontal;
+        this.cardGap = cardGap;
+        drawCard(deck, INITIAL);
         repaintCards();
     }
     
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        GameScreen game = (GameScreen) getWorld();
-        Deck deck = game.getDeck();
-        
-        if (game.isPlayerTurn() && game.canPlay()) {
-            // Clicked own cards
-            if (Greenfoot.mouseClicked(this)) {
-                int cardIndex = cardSelected();
-                
-                if (cardIndex != -1) {
-                    Card card = cards.get(cardIndex);
-                    
-                    if (game.canPlayCard(card)) {
-                        cards.remove(cardIndex);
-                        repaintCards();
-                        game.replaceTopCard(card);
-                    }
-                }
-                
-            } else if (Greenfoot.mouseClicked(deck)) {
-                Card card = deck.drawCard();
-                
-                if (game.canPlayCard(card)) {
-                    game.toggleCanPlay();
-                    playableDeckCard(game, card);
-                } else {
-                    cards.add(card);
-                }
-                
-                repaintCards();
-                
-                game.toggleTurn();
-            } else {
-                return;
-            }
-        }
-        
-        if (cards.size() == 0) {
-            Text text = new Text("Player Wins!", 60, Color.WHITE);
-            game.addObject(text, game.getWidth() / 2, game.getHeight() / 2);
-            Greenfoot.stop();
-        }
+    public Player(String name, Deck deck) {
+        this(name, deck, true, CARD_WIDTH + 10);
+    }
+    
+    public Player(String name, Deck deck, boolean isHorizontal) {
+        this(name, deck, isHorizontal, CARD_WIDTH);
+    }
+    
+    public Player(String name, Deck deck, int cardGap) {
+        this(name, deck, true, cardGap);
     }
     
     public void drawCard(Deck deck, int amount) {
@@ -75,59 +45,41 @@ public class Player extends Actor
         repaintCards();
     }
     
-    public void playableDeckCard(GameScreen game, Card card) {
-        int ypos = getY() - 80;
-        
-        Button playCardButton = new Button(150, 45, "Play Card", 30, Color.BLACK, 20, 6);
-        game.addObject(playCardButton, getX() - 120, ypos);
-        
-        game.addObject(card, getX(), ypos);
-        
-        Button keepCardButton = new Button(150, 45, "Keep Card", 30, Color.BLACK, 20, 6);
-        game.addObject(keepCardButton, getX() + 120, ypos);
-        
-        while (true) {
-            if (Greenfoot.mouseClicked(playCardButton)) {
-                game.replaceTopCard(card);
-                game.toggleCanPlay();
-                break;
-            }
-            
-            if (Greenfoot.mouseClicked(keepCardButton)) {
-                cards.add(card);
-                game.toggleCanPlay();
-                break;
-            }
-        }
-    }
-    
-    private int cardSelected() {
-        MouseInfo mouseInfo = Greenfoot.getMouseInfo();
-        
-        if (mouseInfo != null) {
-            int mouseX = mouseInfo.getX();
-            int topLeftX = getX() - getImage().getWidth() / 2;
-            int bottomRightX = getX() + getImage().getWidth() / 2;
-            
-            int index = 0;
-            for (int i = topLeftX; i < bottomRightX; i += CARDGAP) {
-                if (mouseX >= i && mouseX <= i + CARDGAP - 10) {
-                    return index;
+    public void repaintCards() {
+        GreenfootImage image;
+        if (this.isHorizontal) {
+            image = new GreenfootImage(this.cardGap * this.cards.size() + CARD_WIDTH, 72);
+            int x = CARD_WIDTH / 2;
+            for (Card card: this.cards) {
+                if (GameScreen.showEnemyCards || isUser()) {
+                    image.drawImage(card.getImage(), x, 0);
+                } else {
+                    image.drawImage(new GreenfootImage("Deck.png"), x, 0);
                 }
-                index++;
+                
+                x += this.cardGap;
             }
-        }
-        
-        return -1;
-    }
-    
-    private void repaintCards() {
-        GreenfootImage image = new GreenfootImage(CARDGAP * this.cards.size() + 10, 72);
-        int x = 10;
-        for (Card card: this.cards) {
-            image.drawImage(card.getImage(), x, 0);
-            x += CARDGAP;
+        } else {
+            image = new GreenfootImage(50, this.cardGap * this.cards.size() + CARD_HEIGHT);
+            int y = 0;
+            for (Card card: this.cards) {
+                if (GameScreen.showEnemyCards || isUser()) {
+                    image.drawImage(card.getImage(), 0, y);
+                } else {
+                    image.drawImage(new GreenfootImage("Deck.png"), 0, y);
+                }
+                
+                y += this.cardGap;
+            }
         }
         setImage(image);
+    }
+    
+    public abstract void act();
+    
+    public abstract boolean isUser();
+    
+    public String getName() {
+        return this.name;
     }
 }
