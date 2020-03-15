@@ -34,6 +34,7 @@ public class GameScreen extends World
     private Deck deck;
     private Card topCard;
     private Text turnLabel;
+    private Text directionLabel;
     
     /**
      * Constructor for objects of class GameScreen.
@@ -127,8 +128,11 @@ public class GameScreen extends World
         
         this.direction = Direction.CW;
         
-        this.turnLabel = new Text("Playing:\nUser 1", 30, Color.WHITE);
-        addObject(turnLabel, turnLabel.getImage().getWidth() / 2 + 10, HEIGHT - 30);
+        turnLabel = new Text("Playing:\nUser" + (play2v2 ? " 1" : ""), 30, Color.WHITE);
+        addObject(turnLabel, turnLabel.getImage().getWidth() / 2 + 25, HEIGHT - 30);
+        
+        directionLabel = new Text("Direction:\n" + this.direction.toString(), 30, Color.WHITE);
+        addObject(directionLabel, WIDTH - directionLabel.getImage().getWidth() / 2 - 10, 30);
     }
     
     public void act() {
@@ -187,6 +191,7 @@ public class GameScreen extends World
                 toggleTurn();
             } else if (specialCard.getPower().equals("Reverse")) {
                 this.direction = this.direction.toggleDirection();
+                this.directionLabel.changeText("Direction:\n" + this.direction.toString());
             } else if (specialCard.getPower().equals("Skip")) {
                 toggleTurn();
             }

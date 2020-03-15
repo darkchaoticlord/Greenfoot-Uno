@@ -36,8 +36,6 @@ public class Computer extends Player
                 cards.add(card);
                 repaintCards();
                 
-                GameScreen.wait(1000);
-                
                 if (game.canPlayCard(card)) {
                     cards.remove(card);
                     repaintCards();

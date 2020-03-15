@@ -34,6 +34,8 @@ public class User extends Player
             if (Greenfoot.mouseClicked(this)) {
                 int cardIndex = cardSelected();
                 
+                // System.out.println("Card Index Selected for "+ this.name +": " + cardIndex);
+                
                 if (cardIndex != -1) {
                     Card card = cards.get(cardIndex);
                     
@@ -103,18 +105,19 @@ public class User extends Player
     private int cardSelected() {
         MouseInfo mouseInfo = Greenfoot.getMouseInfo();
         
-        if (mouseInfo != null) {
-            int mouseX = mouseInfo.getX();
-            int topLeftX = getX() - getImage().getWidth() / 2;
-            int bottomRightX = getX() + getImage().getWidth() / 2;
-            
-            int index = 0;
-            for (int i = topLeftX; i < bottomRightX; i += this.cardGap) {
-                if (mouseX >= i && mouseX <= i + this.cardGap - 10) {
-                    return index;
-                }
-                index++;
+        while (mouseInfo == null) {
+        }
+        
+        int mouseX = mouseInfo.getX();
+        int topLeftX = getX() - getImage().getWidth() / 2;
+        int bottomRightX = getX() + getImage().getWidth() / 2;
+        
+        int index = 0;
+        for (int i = topLeftX + CARD_WIDTH / 2; i < bottomRightX; i += this.cardGap) {
+            if (mouseX >= i && mouseX <= i + this.cardGap - 10) {
+                return index;
             }
+            index++;
         }
         
         return -1;
