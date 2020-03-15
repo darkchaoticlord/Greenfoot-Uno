@@ -9,8 +9,8 @@ import java.io.IOException;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class GameScreen extends World
-{
+public class GameScreen extends World {
+    // Screen resolution
     private static final int WIDTH = 850;
     private static final int HEIGHT = 480;
     

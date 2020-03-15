@@ -11,16 +11,19 @@ import java.io.IOException;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Settings extends World
-{
+public class Settings extends World {
+    // Screen Resolution
     private static final int WIDTH = 850;
     private static final int HEIGHT = 480;
+    
+    // Saved Settings
     public static final String CONFIG_FILE = "config.txt";
+    
+    // UI Elements including, Labels, Tick Boxes and Radio Buttons
     private Button backButton;
     private NumberSelect[] playerNumbers;
     private Checkbox showEnemyCardsBox;
     private Checkbox play2v2Box;
-    
     private Text numberOfPlayersLabel;
     private int numberOfPlayers;
     
@@ -28,8 +31,7 @@ public class Settings extends World
      * Constructor for objects of class Settings.
      * 
      */
-    public Settings()
-    {    
+    public Settings() {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(WIDTH, HEIGHT, 1); 
         prepare();

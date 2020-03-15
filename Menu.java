@@ -6,10 +6,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Menu extends World
-{
+public class Menu extends World {
+    // Screen Resolution
     private static final int WIDTH = 850;
     private static final int HEIGHT = 480;
+    
+    // UI Buttons
     private Button newGameButton;
     private Button quitGameButton;
     private Button settingsButton;
@@ -17,18 +19,12 @@ public class Menu extends World
      * Constructor for objects of class MyWorld.
      * 
      */
-    public Menu()
-    {    
+    public Menu() {    
         super(WIDTH, HEIGHT, 1); 
         prepare();
     }
 
-    /**
-     * Prepare the world for the start of the program.
-     * That is: create the initial objects and add them to the world.
-     */
-    private void prepare()
-    {
+    private void prepare() {
         Text text = new Text("UNO", 80, Color.WHITE);
         addObject(text, WIDTH / 2, 90);
         newGameButton = new Button(190, 45, "New Game", 30, Color.BLACK, 37, 7);
