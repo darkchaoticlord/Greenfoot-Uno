@@ -35,6 +35,7 @@ public class GameScreen extends World {
     private Card topCard;
     private Text turnLabel;
     private Text directionLabel;
+    private Text[] playerLabels;
     
     /**
      * Constructor for objects of class GameScreen.
@@ -71,10 +72,16 @@ public class GameScreen extends World {
      */
     private void prepare()
     {
+        // Set up the back button at the top left corner.
         backButton = new Button(100, 40, "Back", 30, Color.BLACK, 23, 5);
         addObject(backButton,60,30);
+        
+        // Create the deck first to allow users to get initial set of cards.
+        
         deck = new Deck();
         addObject(deck,70,240);
+        
+        // Set up the players for normal mode (between 2-4 players) and 2 vs. 2 mode.
         
         if (play2v2) {
             User userOne = new User("User 1", deck);
@@ -117,22 +124,48 @@ public class GameScreen extends World {
                 this.playerOrder = new Player[] {userOne, computerTwo, computerOne, computerThree};
             }
         }
-        this.currentPlayer = 0;
+        
+        // Random select one of the players to start with.
+        
+        this.currentPlayer = Greenfoot.getRandomNumber(playerOrder.length);
+        
+        // Select a number only card for the first top card.
         
         while (topCard == null || topCard.getIndex() < 8 || topCard.getIndex() > 84) {
             topCard = deck.drawCard();
         }
         addObject(topCard, 475, 240);
         
-        this.canPlay = true;
+        // Set up canPlay variable and set initial direction.
         
+        this.canPlay = true;
         this.direction = Direction.CW;
         
-        turnLabel = new Text("Playing:\nUser" + (play2v2 ? " 1" : ""), 30, Color.WHITE);
+        // Set turn and direction labels.
+        
+        turnLabel = new Text("Playing:\n" + playerOrder[currentPlayer].getName(), 30, Color.WHITE);
         addObject(turnLabel, turnLabel.getImage().getWidth() / 2 + 25, HEIGHT - 30);
         
         directionLabel = new Text("Direction:\n" + this.direction.toString(), 30, Color.WHITE);
         addObject(directionLabel, WIDTH - directionLabel.getImage().getWidth() / 2 - 10, 30);
+        
+        // Set player labels.
+        
+        playerLabels = new Text[playerOrder.length];
+        
+        playerLabels[0] = new Text(playerOrder[0].getName(), 20, Color.WHITE);
+        addObject(playerLabels[0], 475, 380);
+        
+        playerLabels[1] = new Text(playerOrder[1].getName(), 20, Color.WHITE);
+        playerLabels[1].setRotation(270);
+        addObject(playerLabels[1], 240, 240);
+        
+        playerLabels[2] = new Text(playerOrder[2].getName(), 20, Color.WHITE);
+        addObject(playerLabels[2], 475, 100);
+        
+        playerLabels[3] = new Text(playerOrder[3].getName(), 20, Color.WHITE);
+        playerLabels[3].setRotation(90);
+        addObject(playerLabels[3], 710, 240);
     }
     
     public void act() {
