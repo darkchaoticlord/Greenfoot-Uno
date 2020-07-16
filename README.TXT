@@ -1,5 +1,5 @@
 PROJECT TITLE: UNO (Greenfoot Java)
-PURPOSE OF PROJECT: Tutoring Sessions
+PURPOSE OF PROJECT: Casual Programming
 VERSION & DATE: v1.0 (2020/2/25)
 HOW TO START THIS PROJECT: Make sure Greenfoot is installed from https://www.greenfoot.org/
 AUTHORS: Jawad Adnan
