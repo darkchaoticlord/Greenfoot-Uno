@@ -2,7 +2,7 @@ PROJECT TITLE: UNO (Greenfoot Java)
 PURPOSE OF PROJECT: Tutoring Sessions
 VERSION & DATE: v1.0 (2020/2/25)
 HOW TO START THIS PROJECT: Make sure Greenfoot is installed from https://www.greenfoot.org/
-AUTHORS: Jawad Adnan & Peter Speirs
+AUTHORS: Jawad Adnan
 
 NOTE:
     - UNO Card Colors: 	Blue: 	#0098DC (0, 152, 220)
